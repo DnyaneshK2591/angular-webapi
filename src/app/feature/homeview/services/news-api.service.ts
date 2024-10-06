@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class NewsAdapterService {
+export class NewsApiService {
   API_KEY = '21e226f5b8114bb4b99c4b8c6114ca1a';
 
   constructor(private httpClient: HttpClient) {}
