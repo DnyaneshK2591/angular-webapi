@@ -42,12 +42,12 @@ import { HttpErrorInterceptorService } from './core/interceptors/HttpErrorInterc
   ],
   providers: [
     {
-      provide:HTTP_INTERCEPTORS,
-      useClass:HttpErrorInterceptorService,
-      multi:true
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptorService,
+      multi: true,
     },
-    LoadingService, 
-    MessagesService
+    LoadingService,
+    MessagesService,
   ],
   bootstrap: [AppComponent],
 })

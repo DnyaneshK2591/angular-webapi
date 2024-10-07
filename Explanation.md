@@ -1,13 +1,15 @@
-# Angular Pipes :
+# Angular WEBAPI
 
-## 1. In built Pipes
+## HTTP INTERCEPTOR
 
-refer example for reguarly used in built pipes
+Interceptors in Angular have several use cases:
 
-## 2. Custom Pipes - Pure Pipes(Default)
+1. Authentication and authorization: You can use an interceptor to add authentication tokens or authorization headers to outgoing requests. This helps ensure that only authorized users can access protected resources.
 
-A pure pipe is only called when Angular detects a change in the value or the parameters passed to a pipe
+2. Error handling: You can use an interceptor to handle errors that occur during HTTP requests. This can be useful for handling network, timeouts, or server-side errors.
 
-## 3. Impure Pipes
+3. Caching: You can use an interceptor to cache responses from the server, which can improve the performance of your application.
 
-An impure pipe is called for every change detection cycle no matter whether the value or parameter(s) changes.
+4. Logging: You can use an interceptor to log HTTP requests and responses. This can be useful for debugging and monitoring your application's performance.
+
+5. Transformation of requests and responses: You can use an interceptor to modify the request or response data. This can be useful for adding or removing data or transforming data to match the format your application expects.
