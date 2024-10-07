@@ -2,6 +2,8 @@
 
 ## HTTP INTERCEPTOR
 
+(https://blog.stackademic.com/angular-interceptors-unleashed-solving-complex-scenarios-with-ease-b1108fb1846e)
+
 Interceptors in Angular have several use cases:
 
 1. Authentication and authorization: You can use an interceptor to add authentication tokens or authorization headers to outgoing requests. This helps ensure that only authorized users can access protected resources.
