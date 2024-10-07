@@ -9,7 +9,7 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class TopHeadlinesService {
-  private apiUrl = 'https://demo7735084.mockable.io/top-headlines';
+  private apiUrl = 'https://demo7735084.mockable.io/top-headlines00';
   constructor(private http: HttpClient) {}
 
   fetchTopHeadlines(): Observable<any> {

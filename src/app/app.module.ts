@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +17,7 @@ import { MessagesComponent } from './shared/components/messages/messages.compone
 import { LocalJsonComponent } from './feature/local-json/local-json.component';
 import { MockableIoComponent } from './feature/mockable-io/mockable-io.component';
 import { HomeComponent } from './feature/homeview/home.component';
+import { HttpErrorInterceptorService } from './core/interceptors/HttpErrorInterceptorService';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,15 @@ import { HomeComponent } from './feature/homeview/home.component';
     MatCardModule,
     MatProgressSpinnerModule,
   ],
-  providers: [LoadingService, MessagesService],
+  providers: [
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:HttpErrorInterceptorService,
+      multi:true
+    },
+    LoadingService, 
+    MessagesService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
