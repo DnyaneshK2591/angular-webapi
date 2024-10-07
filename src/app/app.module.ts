@@ -18,6 +18,8 @@ import { LocalJsonComponent } from './feature/local-json/local-json.component';
 import { MockableIoComponent } from './feature/mockable-io/mockable-io.component';
 import { HomeComponent } from './feature/homeview/home.component';
 import { HttpErrorInterceptorService } from './core/interceptors/HttpErrorInterceptorService';
+import { HttpLoadingInterceptorService } from './core/interceptors/HttpLoadingInterceptorService';
+import { HttpLoggerInterceptorService } from './core/interceptors/HttpLoggerInterceptorService';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,16 @@ import { HttpErrorInterceptorService } from './core/interceptors/HttpErrorInterc
     MatProgressSpinnerModule,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpLoggerInterceptorService,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpLoadingInterceptorService,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptorService,

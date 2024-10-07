@@ -19,10 +19,10 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loading.loadingOn();
+    //this.loading.loadingOn();
     this.apiService.getNews().subscribe(data => {
       this.articles = data['articles'];
-      this.loading.loadingOff();
+      //this.loading.loadingOff();
     });
   }
 }

@@ -17,8 +17,9 @@ export class TopHeadlinesService {
   ) {}
 
   fetchTopHeadlines(): Observable<any> {
-    return this.loading.showLoaderUntilCompleted(
-      this.http.get<any>(this.apiUrl)
-    );
+    // return this.loading.showLoaderUntilCompleted(
+    //   this.http.get<any>(this.apiUrl)
+    // );
+    return this.http.get<any>(this.apiUrl);
   }
 }
