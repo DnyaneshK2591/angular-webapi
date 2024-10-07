@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NewsApiService } from '../../../services/news-api.service';
+
 import { LoadingService } from 'src/app/shared/components/loading/loading.service';
 import { MessagesService } from 'src/app/shared/components/messages/messages.service';
+import { NewsApiService } from '../services/news-api.service';
 
 @Component({
   selector: 'app-home',

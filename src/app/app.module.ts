@@ -12,12 +12,22 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingService } from './shared/components/loading/loading.service';
 import { LoadingComponent } from './shared/components/loading/loading.component';
 import { AboutComponent } from './feature/aboutview/about.component';
-import { HomeComponent } from './feature/homeview/components/home/home.component';
 import { MessagesService } from './shared/components/messages/messages.service';
 import { MessagesComponent } from './shared/components/messages/messages.component';
+import { LocalJsonComponent } from './feature/local-json/local-json.component';
+import { MockableIoComponent } from './feature/mockable-io/mockable-io.component';
+import { HomeComponent } from './feature/homeview/home.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, AboutComponent, LoadingComponent,MessagesComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    AboutComponent,
+    LoadingComponent,
+    MessagesComponent,
+    LocalJsonComponent,
+    MockableIoComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

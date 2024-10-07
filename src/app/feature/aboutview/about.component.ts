@@ -9,7 +9,7 @@ import { MessagesService } from 'src/app/shared/components/messages/messages.ser
 export class AboutComponent implements OnInit {
   constructor(public messages: MessagesService) {}
   ngOnInit(): void {
-    const message = "Could not load courses";
+    const message = 'Could not load courses';
     this.messages.showErrors(message);
   }
 }
