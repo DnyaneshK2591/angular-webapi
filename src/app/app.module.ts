@@ -23,6 +23,9 @@ import { HttpLoggerInterceptorService } from './core/interceptors/HttpLoggerInte
 import { LoginComponent } from './login/login.component';
 import { NavBarComponent } from './shared/components/nav-bar/nav-bar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field'
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -47,6 +50,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatButtonModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+
   ],
   providers: [
     {

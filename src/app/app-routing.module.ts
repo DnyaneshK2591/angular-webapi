@@ -6,6 +6,7 @@ import { MockableIoComponent } from './feature/mockable-io/mockable-io.component
 import { HomeComponent } from './feature/homeview/home.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { authGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate:[authGuard]
   },
   {
     path: 'about',
@@ -33,7 +35,7 @@ const routes: Routes = [
     path: 'mockableio',
     component: MockableIoComponent,
   },
-  
+
    //Wild Card Route for 404 request 
    { path: '**', pathMatch: 'full',  
     component: PageNotFoundComponent }, 
