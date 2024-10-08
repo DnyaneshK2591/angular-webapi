@@ -20,6 +20,9 @@ import { HomeComponent } from './feature/homeview/home.component';
 import { HttpErrorInterceptorService } from './core/interceptors/HttpErrorInterceptorService';
 import { HttpLoadingInterceptorService } from './core/interceptors/HttpLoadingInterceptorService';
 import { HttpLoggerInterceptorService } from './core/interceptors/HttpLoggerInterceptorService';
+import { LoginComponent } from './login/login.component';
+import { NavBarComponent } from './shared/components/nav-bar/nav-bar.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,9 @@ import { HttpLoggerInterceptorService } from './core/interceptors/HttpLoggerInte
     MessagesComponent,
     LocalJsonComponent,
     MockableIoComponent,
+    LoginComponent,
+    NavBarComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
