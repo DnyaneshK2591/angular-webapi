@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { MessagesService } from './messages.service';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -20,6 +21,10 @@ export class MessagesComponent implements OnInit {
     this.errors$ = this.messagesService.errors$.pipe(
       tap(() => (this.showMessages = true))
     );
+
+    interval(10000).subscribe(x => {
+      this.onClose();
+  });
   }
 
   onClose() {

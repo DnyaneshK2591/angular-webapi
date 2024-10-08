@@ -1,21 +1,39 @@
 .messages-container {
-  display: flex;
   color: #a94442;
   background-color: #f2dede;
-  border: 1px solid #ebccd1;
-  padding: 20px;
+  border: 2px solid #d43b55;
   font-family: Roboto;
-  width: 300px;
+
+  width: 30%;
+  height: 60px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+
   position: absolute;
   top: 0;
   right: 0;
-  margin-top: 64px;
-  z-index: 9;
+
+  margin: 0px;
+}
+
+.messages {
+  border: 2px solid black;
+  
+}
+
+#errormessage {
+  width: 95%;
+  align-items: center;
+  padding: 12px;
 }
 
 .close {
-  position: absolute;
-  right: 10px;
-  top: 10px;
   cursor: pointer;
+}
+#closeicon {
+  margin-right: 12px;
+  justify-content: end;
 }
