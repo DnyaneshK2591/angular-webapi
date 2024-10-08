@@ -39,17 +39,20 @@ export class HttpLoggerInterceptorService implements HttpInterceptor {
             error.status +
             ' and status text:' +
             error.statusText;
-          return throwError(error);
+          return throwError(() => error);
         }),
         finalize(() => {
           console.log(
-            req.url +
-              ': ' +
+            '%c ***Logger***\n :: URL => ' +
+              req.url +
+              '\n' +
+              ' :: ERROR => ' +
               msg +
-              '!.' +
-              '\n Request completed in' +
+              '\n :: Request completed in ' +
               (Date.now() - reqStartDate) +
-              'ms'
+              'ms' +
+              '\n ***',
+            'color:green'
           );
         })
       );

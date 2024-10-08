@@ -24,7 +24,7 @@ export class MessagesComponent implements OnInit {
 
     interval(10000).subscribe(x => {
       this.onClose();
-  });
+    });
   }
 
   onClose() {
