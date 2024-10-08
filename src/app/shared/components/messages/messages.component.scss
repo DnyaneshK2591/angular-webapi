@@ -12,9 +12,11 @@
   gap: 12px;
   align-items: center;
 
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
+
+  z-index: 2;
 
   margin: 0px;
 }

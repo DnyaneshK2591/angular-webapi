@@ -10,7 +10,7 @@ import { LoadingService } from 'src/app/shared/components/loading/loading.servic
   providedIn: 'root',
 })
 export class TopHeadlinesService {
-  private apiUrl = 'https://demo7735084.mockable.io/top-headlines00';
+  private apiUrl = 'https://demo7735084.mockable.io/top-headlines';
   constructor(
     private http: HttpClient,
     private loading: LoadingService
