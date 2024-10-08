@@ -1,1 +1,21 @@
-<p>local-json works!</p>
+<div class="home-view">
+    <mat-card *ngFor="let article of articles" class="card-view">
+      <mat-card-header>
+        <mat-card-title>{{ article.title }}</mat-card-title>
+        <mat-card-subtitle
+          >Published: {{ article.publishedAt }} / Author:
+          {{ article.author }}</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ article.description }}</p>
+        <img class="image-view" src="{{ article.urlToImage }}" />
+      </mat-card-content>
+      <mat-card-actions>
+        <a class="link-view" mat-button href="{{ article.url }}"
+          >Read full article</a
+        >
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  

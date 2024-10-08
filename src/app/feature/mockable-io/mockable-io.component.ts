@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TopHeadlinesService } from '../services/top-headlines.service';
-import { LoadingService } from 'src/app/shared/components/loading/loading.service';
+import { MockableIOService } from '../services/mockable-io.service';
+
 
 @Component({
   selector: 'app-mockable-io',
@@ -10,14 +10,13 @@ import { LoadingService } from 'src/app/shared/components/loading/loading.servic
 export class MockableIoComponent implements OnInit {
   articles: any;
   constructor(
-    private topHeadlinesService: TopHeadlinesService,
-    private loading: LoadingService
+    private mockableIOService: MockableIOService,
   ) {}
   ngOnInit(): void {
     this.getTopHeadlines();
   }
   getTopHeadlines() {
-    this.topHeadlinesService.fetchTopHeadlines().subscribe(data => {
+    this.mockableIOService.fetchTopHeadlines().subscribe(data => {
       this.articles = data['articles'];
     });
   }
