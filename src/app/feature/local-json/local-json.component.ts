@@ -8,9 +8,7 @@ import { LocalJsonService } from '../services/local-json.service';
 })
 export class LocalJsonComponent {
   articles: any;
-  constructor(
-    private localJsonService: LocalJsonService,
-  ) {}
+  constructor(private localJsonService: LocalJsonService) {}
   ngOnInit(): void {
     this.getTopHeadlines();
   }

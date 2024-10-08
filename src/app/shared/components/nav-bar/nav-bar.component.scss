@@ -1,21 +1,20 @@
 .main-nav {
-    position: fixed;
-    z-index: 1;
-    opacity: 1;
-    //border: 1px solid red;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  .nav-heading {
-    //border: 1px solid yellow;
-    width: 20%;
-  }
-  .nav-view {
-    //border: 2px solid white;
-    margin-right: 12px;
-    width: 80%;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
+  position: fixed;
+  z-index: 1;
+  opacity: 1;
+  //border: 1px solid red;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.nav-heading {
+  //border: 1px solid yellow;
+  width: 20%;
+}
+.nav-view {
+  //border: 2px solid white;
+  margin-right: 12px;
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
+}

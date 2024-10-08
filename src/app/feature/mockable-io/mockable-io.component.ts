@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MockableIOService } from '../services/mockable-io.service';
 
-
 @Component({
   selector: 'app-mockable-io',
   templateUrl: './mockable-io.component.html',
@@ -9,9 +8,7 @@ import { MockableIOService } from '../services/mockable-io.service';
 })
 export class MockableIoComponent implements OnInit {
   articles: any;
-  constructor(
-    private mockableIOService: MockableIOService,
-  ) {}
+  constructor(private mockableIOService: MockableIOService) {}
   ngOnInit(): void {
     this.getTopHeadlines();
   }

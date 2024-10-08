@@ -2,10 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocalJsonService {
-
   private loacalAssetUrl = '../assets/top-headlines.json';
   constructor(private http: HttpClient) {}
 

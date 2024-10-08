@@ -15,30 +15,32 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path:'login',
-    component:LoginComponent
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'home',
     component: HomeComponent,
-    canActivate:[authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'about',
     component: AboutComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'localjson',
     component: LocalJsonComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'mockableio',
     component: MockableIoComponent,
+    canActivate: [authGuard],
   },
 
-   //Wild Card Route for 404 request 
-   { path: '**', pathMatch: 'full',  
-    component: PageNotFoundComponent }, 
+  //Wild Card Route for 404 request
+  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 ];
 
 @NgModule({
