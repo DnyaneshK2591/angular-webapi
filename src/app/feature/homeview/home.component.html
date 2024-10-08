@@ -1,7 +1,5 @@
 <div class="home-view">
-  <mat-card
-    *ngFor="let article of articles"
-    class="card-view">
+  <mat-card *ngFor="let article of articles" class="card-view">
     <mat-card-header>
       <mat-card-title>{{ article.title }}</mat-card-title>
       <mat-card-subtitle
@@ -14,7 +12,9 @@
       <img class="image-view" src="{{ article.urlToImage }}" />
     </mat-card-content>
     <mat-card-actions>
-      <a class="link-view" mat-button href="{{ article.url }}">Read full article</a>
+      <a class="link-view" mat-button href="{{ article.url }}"
+        >Read full article</a
+      >
     </mat-card-actions>
   </mat-card>
 </div>
