@@ -7,16 +7,22 @@ import { HomeComponent } from './feature/homeview/home.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { authGuard } from './core/guards/auth.guard';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'dashboard',
     pathMatch: 'full',
   },
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path:'dashboard',
+    component:DashboardComponent,
+    //canActivate:[authGuard]
   },
   {
     path: 'home',

@@ -26,6 +26,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { MatInputModule } from '@angular/material/input';
     LoginComponent,
     NavBarComponent,
     PageNotFoundComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

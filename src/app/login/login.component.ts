@@ -29,7 +29,7 @@ export class LoginComponent {
 
     if (val.email == 'admin' && val.password == 'admin') {
       this.authService.isAuthenticated = true;
-      this.router.navigate(['/home']);
+      this.router.navigate(['/dashboard']);
     }
   }
 }
