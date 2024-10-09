@@ -17,8 +17,8 @@ export class LoginComponent {
     private authService: AuthService
   ) {
     this.form = fb.group({
-      email: ['test@angular-university.io', [Validators.required]],
-      password: ['test', [Validators.required]],
+      email: ['admin', [Validators.required]],
+      password: ['admin', [Validators.required]],
     });
   }
 

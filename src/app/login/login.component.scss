@@ -1,9 +1,27 @@
-.login-page {
-  max-width: 350px;
-  margin: 50px auto 0 auto;
+.container {
+  background-image: url('./../../assets/login-background.jpg');
+  /*Flexbox - commonly used css*/
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  /*End*/
 }
-
-.login-form {
+.text-title {
+  display: flex;
+  justify-content: center;
+  margin: 12px;
+}
+.view-card {
+  border: 5px solid grey;
+  border: 12px;
+  min-width: 25%;
+  min-height: 40%;
+  box-shadow: 10px yellow;
+}
+.item {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
