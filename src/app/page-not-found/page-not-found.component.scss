@@ -1,23 +1,31 @@
 .main {
-  background-image: radial-gradient(circle, red, yellow, green);
+  background-image: url('./../../assets/login-background.jpg');
   height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
 .card-view {
-  height: 60%;
-  width: 40%;
+  min-height: 60%;
+  min-width: 40%;
   border-radius: 18px;
   box-shadow: 10px 10px 5px lightblue;
   align-items: center;
-}
-.text-view {
+  //border: 3px solid green;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  vertical-align: middle;
-  height: 100%;
+  gap: 48px;
+}
+.text-view {
   font-size: 120px;
+  font-weight: bold;
+  //border: 2px solid red;
+}
+.text-view-desc{
+  font-size: 40px;
+  //border: 1px solid blue;
 }

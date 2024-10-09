@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-page-not-found',
@@ -6,7 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./page-not-found.component.scss'],
 })
 export class PageNotFoundComponent {
-  constructor() {
+  constructor(
+    private router:Router
+  ) {
     console.log('Page not found loaded...');
+  }
+  onRedirect(){
+    this.router.navigate(["/login"]);
   }
 }
