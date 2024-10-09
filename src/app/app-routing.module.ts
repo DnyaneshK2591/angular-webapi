@@ -22,28 +22,46 @@ const routes: Routes = [
   {
     path:'dashboard',
     component:DashboardComponent,
-    //canActivate:[authGuard]
+    //canActivate:[authGuard],
+    children:[
+      {
+        path:'home',
+        component:HomeComponent
+      },
+      {
+        path:'mockableio',
+        component:MockableIoComponent
+      },
+      {
+        path:"localjson",
+        component:LocalJsonComponent
+      },
+      {
+        path:"about",
+        component:AboutComponent
+      }
+    ]
   },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'about',
-    component: AboutComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'localjson',
-    component: LocalJsonComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'mockableio',
-    component: MockableIoComponent,
-    canActivate: [authGuard],
-  },
+  // {
+  //   path: 'home',
+  //   component: HomeComponent,
+  //   canActivate: [authGuard],
+  // },
+  // {
+  //   path: 'about',
+  //   component: AboutComponent,
+  //   canActivate: [authGuard],
+  // },
+  // {
+  //   path: 'localjson',
+  //   component: LocalJsonComponent,
+  //   canActivate: [authGuard],
+  // },
+  // {
+  //   path: 'mockableio',
+  //   component: MockableIoComponent,
+  //   canActivate: [authGuard],
+  // },
 
   //Wild Card Route for 404 request
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
