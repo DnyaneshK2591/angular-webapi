@@ -7,12 +7,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./page-not-found.component.scss'],
 })
 export class PageNotFoundComponent {
-  constructor(
-    private router:Router
-  ) {
+  constructor(private router: Router) {
     console.log('Page not found loaded...');
   }
-  onRedirect(){
-    this.router.navigate(["/login"]);
+  onRedirect() {
+    this.router.navigate(['/login']);
   }
 }

@@ -20,27 +20,27 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path:'dashboard',
-    component:DashboardComponent,
+    path: 'dashboard',
+    component: DashboardComponent,
     //canActivate:[authGuard],
-    children:[
+    children: [
       {
-        path:'home',
-        component:HomeComponent
+        path: 'home',
+        component: HomeComponent,
       },
       {
-        path:'mockableio',
-        component:MockableIoComponent
+        path: 'mockableio',
+        component: MockableIoComponent,
       },
       {
-        path:"localjson",
-        component:LocalJsonComponent
+        path: 'localjson',
+        component: LocalJsonComponent,
       },
       {
-        path:"about",
-        component:AboutComponent
-      }
-    ]
+        path: 'about',
+        component: AboutComponent,
+      },
+    ],
   },
   // {
   //   path: 'home',

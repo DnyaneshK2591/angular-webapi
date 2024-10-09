@@ -27,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     NavBarComponent,
     PageNotFoundComponent,
     DashboardComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
