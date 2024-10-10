@@ -1,8 +1,9 @@
-* {
+.main-view {
   background-color: black;
+  border: 2px solid white;
 }
 .container {
-  border: 1px solid white;
+  //border: 1px solid white;
   /*Flexbox - commonly used css*/
   display: flex;
   justify-content: space-evenly;
@@ -13,7 +14,7 @@
 }
 
 .left {
-  background-color: aqua;
+  background-color: yellow;
   border: 1px solid black;
 }
 .main {
@@ -23,4 +24,10 @@
 .right {
   background-color: aqua;
   border: 1px solid black;
+}
+.copyright {
+  color: white;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
