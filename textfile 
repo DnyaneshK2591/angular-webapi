@@ -1,34 +1,32 @@
-import { Directive, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+// disable-button-link.directive.ts
+import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[appDisableButtonsAndLinks]'
+  selector: '[appDisableButtonLink]'
 })
-export class DisableButtonsAndLinksDirective implements OnChanges {
-  @Input('appDisableButtonsAndLinks') isDisabled: boolean = false;
+export class DisableButtonLinkDirective implements OnInit {
+  @Input('appDisableButtonLink') isDisabled = true;
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const nativeEl = this.el.nativeElement;
-    const buttons = nativeEl.querySelectorAll('button, a');
+  ngOnInit(): void {
+    if (this.isDisabled) {
+      const element = this.el.nativeElement as HTMLElement;
 
-    buttons.forEach((btn: HTMLElement) => {
-      if (this.isDisabled) {
-        this.renderer.setAttribute(btn, 'disabled', 'true');
+      // Change opacity of the div
+      this.renderer.setStyle(element, 'opacity', '0.5');
 
-        // For <a> tags, prevent clicks and make visually disabled
-        if (btn.tagName.toLowerCase() === 'a') {
-          this.renderer.setStyle(btn, 'pointer-events', 'none');
-          this.renderer.setStyle(btn, 'opacity', '0.5');
+      // Disable buttons and links only
+      const children = element.querySelectorAll('button, a');
+      children.forEach((child: HTMLElement) => {
+        this.renderer.setStyle(child, 'pointer-events', 'none');
+        this.renderer.setAttribute(child, 'aria-disabled', 'true');
+
+        // Optional: visually indicate disable for button
+        if (child.tagName.toLowerCase() === 'button') {
+          this.renderer.setAttribute(child, 'disabled', 'true');
         }
-      } else {
-        this.renderer.removeAttribute(btn, 'disabled');
-
-        if (btn.tagName.toLowerCase() === 'a') {
-          this.renderer.setStyle(btn, 'pointer-events', 'auto');
-          this.renderer.removeStyle(btn, 'opacity');
-        }
-      }
-    });
+      });
+    }
   }
 }
