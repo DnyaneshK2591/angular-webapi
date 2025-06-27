@@ -1,69 +1,38 @@
-// read-only-mode.directive.ts
+// disable-button.directive.ts
 import {
   Directive,
   ElementRef,
   Input,
-  OnChanges,
   Renderer2,
+  OnChanges,
   SimpleChanges
 } from '@angular/core';
 
 @Directive({
-  selector: '[appReadOnlyMode]'
+  selector: '[appDisableButton]'
 })
-export class ReadOnlyModeDirective implements OnChanges {
-  @Input('appReadOnlyMode') isReadOnly = false;
-
-  private anchorListeners: (() => void)[] = [];
+export class DisableButtonDirective implements OnChanges {
+  @Input('appDisableButton') isDisabled = false;
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ('isReadOnly' in changes) {
-      this.toggleReadOnly(this.el.nativeElement, this.isReadOnly);
+    if (changes['isDisabled']) {
+      this.setDisabledState(this.isDisabled);
     }
   }
 
-  private toggleReadOnly(root: HTMLElement, isReadOnly: boolean) {
-    const buttons = root.querySelectorAll('button');
-    const anchors = root.querySelectorAll('a');
+  private setDisabledState(isDisabled: boolean): void {
+    const element = this.el.nativeElement;
 
-    // Clean up old listeners
-    this.anchorListeners.forEach((unlisten) => unlisten());
-    this.anchorListeners = [];
-
-    buttons.forEach((btn: HTMLElement) => {
-      if (isReadOnly) {
-        this.renderer.setAttribute(btn, 'disabled', 'true');
-        this.renderer.setStyle(btn, 'cursor', 'not-allowed');
-        this.renderer.setStyle(btn, 'opacity', '0.6');
-      } else {
-        this.renderer.removeAttribute(btn, 'disabled');
-        this.renderer.removeStyle(btn, 'cursor');
-        this.renderer.removeStyle(btn, 'opacity');
-      }
-    });
-
-    anchors.forEach((a: HTMLElement) => {
-      if (isReadOnly) {
-        this.renderer.setAttribute(a, 'data-href', a.getAttribute('href') || '');
-        this.renderer.removeAttribute(a, 'href');
-        this.renderer.setStyle(a, 'cursor', 'not-allowed');
-        this.renderer.setStyle(a, 'opacity', '0.6');
-
-        // Prevent click navigation
-        const unlisten = this.renderer.listen(a, 'click', (event: Event) => {
-          event.preventDefault();
-          event.stopImmediatePropagation();
-        });
-        this.anchorListeners.push(unlisten);
-      } else {
-        const href = a.getAttribute('data-href');
-        if (href) this.renderer.setAttribute(a, 'href', href);
-        this.renderer.removeAttribute(a, 'data-href');
-        this.renderer.removeStyle(a, 'cursor');
-        this.renderer.removeStyle(a, 'opacity');
-      }
-    });
+    if (isDisabled) {
+      this.renderer.setAttribute(element, 'disabled', 'true');
+      this.renderer.setStyle(element, 'opacity', '0.6');
+      this.renderer.setStyle(element, 'cursor', 'not-allowed');
+    } else {
+      this.renderer.removeAttribute(element, 'disabled');
+      this.renderer.removeStyle(element, 'opacity');
+      this.renderer.removeStyle(element, 'cursor');
+    }
   }
 }
