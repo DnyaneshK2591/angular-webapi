@@ -1,38 +1,60 @@
-// disable-button.directive.ts
-import {
-  Directive,
-  ElementRef,
-  Input,
-  Renderer2,
-  OnChanges,
-  SimpleChanges
-} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Item } from '../models/item.model';
 
-@Directive({
-  selector: '[appDisableButton]'
+@Injectable({
+  providedIn: 'root',
 })
-export class DisableButtonDirective implements OnChanges {
-  @Input('appDisableButton') isDisabled = false;
+export class ItemStoreService {
+  private readonly _items = new BehaviorSubject<Item[]>([]);
+  readonly items$: Observable<Item[]> = this._items.asObservable();
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isDisabled']) {
-      this.setDisabledState(this.isDisabled);
-    }
+  private get items(): Item[] {
+    return this._items.getValue();
   }
 
-  private setDisabledState(isDisabled: boolean): void {
-    const element = this.el.nativeElement;
+  private set items(value: Item[]) {
+    this._items.next(value);
+  }
 
-    if (isDisabled) {
-      this.renderer.setAttribute(element, 'disabled', 'true');
-      this.renderer.setStyle(element, 'opacity', '0.6');
-      this.renderer.setStyle(element, 'cursor', 'not-allowed');
-    } else {
-      this.renderer.removeAttribute(element, 'disabled');
-      this.renderer.removeStyle(element, 'opacity');
-      this.renderer.removeStyle(element, 'cursor');
+  /** Add a new item */
+  add(item: Item): void {
+    if (this.items.find(existing => existing.id === item.id)) {
+      console.warn(`Item with id ${item.id} already exists.`);
+      return;
     }
+    this.items = [...this.items, item];
+  }
+
+  /** Update an existing item */
+  update(item: Item): void {
+    if (!this.items.find(existing => existing.id === item.id)) {
+      console.warn(`Item with id ${item.id} not found.`);
+      return;
+    }
+
+    this.items = this.items.map(existing =>
+      existing.id === item.id ? { ...existing, ...item } : existing
+    );
+  }
+
+  /** Delete an item by ID */
+  delete(id: number): void {
+    if (!this.items.find(existing => existing.id === id)) {
+      console.warn(`Item with id ${id} does not exist.`);
+      return;
+    }
+
+    this.items = this.items.filter(item => item.id !== id);
+  }
+
+  /** Clear all items */
+  clear(): void {
+    this.items = [];
+  }
+
+  /** Get item directly (non-reactive) */
+  getById(id: number): Item | undefined {
+    return this.items.find(item => item.id === id);
   }
 }
