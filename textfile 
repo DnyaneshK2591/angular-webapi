@@ -1,44 +1,30 @@
-// review-state.guard.ts
-import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { ReviewService } from './review.service';
-import { map, catchError, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Review, ReviewStatus } from './your-model-path';
 
-export const reviewStateGuard = (route: ActivatedRouteSnapshot) => {
-  const router = inject(Router);
-  const reviewService = inject(ReviewService);
+@Injectable({
+  providedIn: 'root'
+})
+export class ReviewStoreService {
+  private reviewMap = new Map<number, Review>();
 
-  const reviewId = +route.paramMap.get('reviewId')!;
-  const urlStatus = route.paramMap.get('status')!;
-  const validStatuses = ['create', 'draft', 'pending', 'completed', 'read-only'];
+  // Set records to store (cast status to enum if needed)
+  setRecords(records: any[]) {
+    const casted: Review[] = records.map(r => ({
+      ...r,
+      status: r.status as ReviewStatus
+    }));
 
-  // Handle invalid status in URL
-  if (!validStatuses.includes(urlStatus)) {
-    router.navigate(['/error']);
-    return of(false);
+    this.reviewMap.clear();
+    casted.forEach(record => this.reviewMap.set(record.reviewId, record));
   }
 
-  return reviewService.getReviewStatus(reviewId).pipe(
-    map(actualStatus => {
-      if (urlStatus === 'create' && actualStatus !== 'create') {
-        // Redirect create → actual state
-        router.navigate([
-          `/watchlist/${route.paramMap.get('templateId')}/reviewid/${reviewId}/reviewuid/${route.paramMap.get('reviewUId')}/status/${actualStatus}`
-        ]);
-        return false;
-      }
+  // ✅ Get the enum status of a given review ID
+  getStatus(reviewId: number): ReviewStatus | undefined {
+    return this.reviewMap.get(reviewId)?.status;
+  }
 
-      if (urlStatus === actualStatus || urlStatus === 'create') {
-        return true;
-      }
-
-      // Mismatched status
-      router.navigate(['/error']);
-      return false;
-    }),
-    catchError(() => {
-      router.navigate(['/error']);
-      return of(false);
-    })
-  );
-};
+  // Optionally get the whole Review
+  getReview(reviewId: number): Review | undefined {
+    return this.reviewMap.get(reviewId);
+  }
+}
