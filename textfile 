@@ -1,16 +1,54 @@
-@Injectable({ providedIn: 'root' })
-export class ReviewStateGuard implements CanActivate {
-  constructor(private refreshHelper: BrowserRefreshHelperService) {}
+import { Injectable } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 
-  canActivate(): boolean {
-    if (this.refreshHelper.wasBrowserReload()) {
-      console.log('Browser reload detected');
-    } else if (this.refreshHelper.wasColdLoad()) {
-      console.log('Cold load detected');
-    } else if (this.refreshHelper.wasRouteNavigation()) {
-      console.log('Normal route navigation');
+@Injectable({ providedIn: 'root' })
+export class BrowserRefreshHelperService {
+  private browserReload = false;
+  private coldLoad = false;
+  private routeNavigation = false;
+
+  private firstNavigationHandled = false;
+
+  constructor(private router: Router) {
+    this.detectFirstLoad();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        // After first page load, all navigations are route navigations
+        if (this.firstNavigationHandled) {
+          this.browserReload = false;
+          this.coldLoad = false;
+          this.routeNavigation = true;
+        }
+
+        this.firstNavigationHandled = true;
+      }
+    });
+  }
+
+  /**
+   * Detect only the first browser entry (cold load or reload)
+   */
+  private detectFirstLoad(): void {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+
+    if (nav?.type === 'reload') {
+      this.browserReload = true;
+    } else if (nav?.type === 'navigate') {
+      this.coldLoad = true;
     }
 
-    return true;
+    // Do not mark routeNavigation true yet – only after Angular router starts
+  }
+
+  wasBrowserReload(): boolean {
+    return this.browserReload;
+  }
+
+  wasColdLoad(): boolean {
+    return this.coldLoad;
+  }
+
+  wasRouteNavigation(): boolean {
+    return this.routeNavigation;
   }
 }
