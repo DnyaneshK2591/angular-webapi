@@ -1,25 +1,59 @@
-// main.ts
-let navType: string | null = null;
+// browser-refresh-helper.service.ts
+import { Injectable } from '@angular/core';
+import { Router, NavigationStart } from '@angular/router';
 
-try {
-  const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-  navType = navEntry?.type;
-} catch {
-  // fallback for older browsers / environments
-  navType = (performance as any).navigation?.type === 1 ? 'reload' : 'navigate';
+@Injectable({ providedIn: 'root' })
+export class BrowserRefreshHelperService {
+  private browserReload = false;
+  private coldLoad = false;
+  private internalNavigation = false;
+  private initialized = false;
+
+  constructor(private router: Router) {
+    const navType = sessionStorage.getItem('creditreview-nav-type');
+    sessionStorage.removeItem('creditreview-nav-type'); // Clear after reading
+
+    if (navType === 'reload') {
+      this.browserReload = true;
+      console.log('🔄 Browser reload detected');
+    } else if (navType === 'cold') {
+      this.coldLoad = true;
+      console.log('🧊 Cold load detected');
+    } else {
+      console.log('⚠️ Unknown navigation type (may be internal)');
+    }
+
+    this.initialized = true;
+
+    // Listen for internal navigations (after load)
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart && this.initialized) {
+        this.browserReload = false;
+        this.coldLoad = false;
+        this.internalNavigation = true;
+        console.log('➡️ Internal navigation detected');
+      }
+    });
+  }
+
+  // Accessors
+  wasBrowserReload(): boolean {
+    return this.browserReload;
+  }
+
+  wasColdLoad(): boolean {
+    return this.coldLoad;
+  }
+
+  wasRouteNavigation(): boolean {
+    return this.internalNavigation;
+  }
+
+  logStatus() {
+    console.log('[RefreshHelper] Status', {
+      reload: this.browserReload,
+      cold: this.coldLoad,
+      internal: this.internalNavigation,
+    });
+  }
 }
-
-// Store in sessionStorage so it can be read later
-if (navType === 'reload') {
-  sessionStorage.setItem('creditreview-nav-type', 'reload');
-} else if (navType === 'navigate') {
-  sessionStorage.setItem('creditreview-nav-type', 'cold');
-} else {
-  sessionStorage.setItem('creditreview-nav-type', 'unknown');
-}
-
-console.log('🌍 Load Type Detected in main.ts:', navType);
-
-// Now bootstrap Angular
-import('./bootstrap')
-  .catch(err => console.error(err));
