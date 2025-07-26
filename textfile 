@@ -1,61 +1,16 @@
-import { Injectable } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
-
 @Injectable({ providedIn: 'root' })
-export class BrowserRefreshHelperService {
-  private browserReload = false;
-  private coldLoad = false;
-  private routeNavigation = false;
+export class ReviewStateGuard implements CanActivate {
+  constructor(private refreshHelper: BrowserRefreshHelperService) {}
 
-  constructor(private router: Router) {
-    this.detectReloadOrColdLoad();
-    this.listenToNavigation();
-  }
-
-  /**
-   * Detect browser reload or cold load using performance API
-   */
-  private detectReloadOrColdLoad(): void {
-    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    if (nav?.type === 'reload') {
-      this.browserReload = true;
-    } else if (nav?.type === 'navigate') {
-      this.coldLoad = true;
+  canActivate(): boolean {
+    if (this.refreshHelper.wasBrowserReload()) {
+      console.log('Browser reload detected');
+    } else if (this.refreshHelper.wasColdLoad()) {
+      console.log('Cold load detected');
+    } else if (this.refreshHelper.wasRouteNavigation()) {
+      console.log('Normal route navigation');
     }
-  }
 
-  /**
-   * Listen to internal route navigations
-   */
-  private listenToNavigation(): void {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        // If not the first load, mark as route navigation
-        if (!this.browserReload && !this.coldLoad) {
-          this.routeNavigation = true;
-        }
-      }
-    });
-  }
-
-  /**
-   * Whether this was a full browser reload
-   */
-  wasBrowserReload(): boolean {
-    return this.browserReload;
-  }
-
-  /**
-   * Whether this was a cold load (user typed URL or refreshed a deep link)
-   */
-  wasColdLoad(): boolean {
-    return this.coldLoad;
-  }
-
-  /**
-   * Whether this was a normal route navigation inside app
-   */
-  wasRouteNavigation(): boolean {
-    return this.routeNavigation;
+    return true;
   }
 }
