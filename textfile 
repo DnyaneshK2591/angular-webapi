@@ -1,59 +1,23 @@
-// browser-refresh-helper.service.ts
+// review-state.guard.ts
 import { Injectable } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
+import { CanActivate } from '@angular/router';
+import { BrowserRefreshHelperService } from './browser-refresh-helper.service';
 
 @Injectable({ providedIn: 'root' })
-export class BrowserRefreshHelperService {
-  private browserReload = false;
-  private coldLoad = false;
-  private internalNavigation = false;
-  private initialized = false;
+export class ReviewStateGuard implements CanActivate {
+  constructor(private helper: BrowserRefreshHelperService) {}
 
-  constructor(private router: Router) {
-    const navType = sessionStorage.getItem('creditreview-nav-type');
-    sessionStorage.removeItem('creditreview-nav-type'); // Clear after reading
+  canActivate(): boolean {
+    this.helper.logStatus();
 
-    if (navType === 'reload') {
-      this.browserReload = true;
-      console.log('🔄 Browser reload detected');
-    } else if (navType === 'cold') {
-      this.coldLoad = true;
-      console.log('🧊 Cold load detected');
-    } else {
-      console.log('⚠️ Unknown navigation type (may be internal)');
+    if (this.helper.wasBrowserReload()) {
+      console.log('✅ Guard: Reload');
+    } else if (this.helper.wasColdLoad()) {
+      console.log('✅ Guard: Cold load');
+    } else if (this.helper.wasRouteNavigation()) {
+      console.log('✅ Guard: Internal navigation');
     }
 
-    this.initialized = true;
-
-    // Listen for internal navigations (after load)
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart && this.initialized) {
-        this.browserReload = false;
-        this.coldLoad = false;
-        this.internalNavigation = true;
-        console.log('➡️ Internal navigation detected');
-      }
-    });
-  }
-
-  // Accessors
-  wasBrowserReload(): boolean {
-    return this.browserReload;
-  }
-
-  wasColdLoad(): boolean {
-    return this.coldLoad;
-  }
-
-  wasRouteNavigation(): boolean {
-    return this.internalNavigation;
-  }
-
-  logStatus() {
-    console.log('[RefreshHelper] Status', {
-      reload: this.browserReload,
-      cold: this.coldLoad,
-      internal: this.internalNavigation,
-    });
+    return true;
   }
 }
