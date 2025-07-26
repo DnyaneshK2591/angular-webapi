@@ -1,49 +1,39 @@
 import { Injectable } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class BrowserRefreshHelperService {
   private browserReload = false;
   private coldLoad = false;
   private routeNavigation = false;
-
-  private initialCheckDone = false;
+  private initialized = false;
 
   constructor(private router: Router) {
-    this.detectFirstLoadType();
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart && this.initialCheckDone) {
+    // Step 1: Read nav type from sessionStorage
+    const navType = sessionStorage.getItem('creditreview-nav-type');
+    sessionStorage.removeItem('creditreview-nav-type'); // clear after read
+
+    if (navType === 'reload') {
+      this.browserReload = true;
+      console.log('🌀 Browser reload detected');
+    } else if (navType === 'cold') {
+      this.coldLoad = true;
+      console.log('🌐 Cold load detected');
+    } else {
+      // This could happen if main.ts missed setting sessionStorage
+      console.log('⚠️ Unknown load type');
+    }
+
+    this.initialized = true;
+
+    // Step 2: Listen to future internal navigations
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart && this.initialized) {
         this.routeNavigation = true;
         this.browserReload = false;
         this.coldLoad = false;
+        console.log('➡️ Internal navigation detected');
       }
-    });
-  }
-
-  private detectFirstLoadType(): void {
-    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-
-    if (!nav) return;
-
-    switch (nav.type) {
-      case 'reload':
-        this.browserReload = true;
-        break;
-      case 'navigate':
-        // If app is loaded on a deep link (e.g., typing URL and pressing Enter)
-        this.coldLoad = true;
-        break;
-      default:
-        // Can handle 'back_forward' or unknown cases
-        break;
-    }
-
-    this.initialCheckDone = true;
-
-    console.log('%c[BrowserRefreshHelper] Init', 'color: green', {
-      navType: nav.type,
-      browserReload: this.browserReload,
-      coldLoad: this.coldLoad,
     });
   }
 
