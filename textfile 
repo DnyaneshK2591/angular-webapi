@@ -1,9 +1,25 @@
-const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+// main.ts
+let navType: string | null = null;
 
-if (navEntry?.type === 'reload') {
+try {
+  const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+  navType = navEntry?.type;
+} catch {
+  // fallback for older browsers / environments
+  navType = (performance as any).navigation?.type === 1 ? 'reload' : 'navigate';
+}
+
+// Store in sessionStorage so it can be read later
+if (navType === 'reload') {
   sessionStorage.setItem('creditreview-nav-type', 'reload');
-} else if (navEntry?.type === 'navigate') {
+} else if (navType === 'navigate') {
   sessionStorage.setItem('creditreview-nav-type', 'cold');
 } else {
   sessionStorage.setItem('creditreview-nav-type', 'unknown');
 }
+
+console.log('🌍 Load Type Detected in main.ts:', navType);
+
+// Now bootstrap Angular
+import('./bootstrap')
+  .catch(err => console.error(err));
