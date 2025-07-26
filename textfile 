@@ -7,37 +7,44 @@ export class BrowserRefreshHelperService {
   private coldLoad = false;
   private routeNavigation = false;
 
-  private firstNavigationHandled = false;
+  private initialCheckDone = false;
 
   constructor(private router: Router) {
-    this.detectFirstLoad();
+    this.detectFirstLoadType();
     this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        // After first page load, all navigations are route navigations
-        if (this.firstNavigationHandled) {
-          this.browserReload = false;
-          this.coldLoad = false;
-          this.routeNavigation = true;
-        }
-
-        this.firstNavigationHandled = true;
+      if (event instanceof NavigationStart && this.initialCheckDone) {
+        this.routeNavigation = true;
+        this.browserReload = false;
+        this.coldLoad = false;
       }
     });
   }
 
-  /**
-   * Detect only the first browser entry (cold load or reload)
-   */
-  private detectFirstLoad(): void {
+  private detectFirstLoadType(): void {
     const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
 
-    if (nav?.type === 'reload') {
-      this.browserReload = true;
-    } else if (nav?.type === 'navigate') {
-      this.coldLoad = true;
+    if (!nav) return;
+
+    switch (nav.type) {
+      case 'reload':
+        this.browserReload = true;
+        break;
+      case 'navigate':
+        // If app is loaded on a deep link (e.g., typing URL and pressing Enter)
+        this.coldLoad = true;
+        break;
+      default:
+        // Can handle 'back_forward' or unknown cases
+        break;
     }
 
-    // Do not mark routeNavigation true yet – only after Angular router starts
+    this.initialCheckDone = true;
+
+    console.log('%c[BrowserRefreshHelper] Init', 'color: green', {
+      navType: nav.type,
+      browserReload: this.browserReload,
+      coldLoad: this.coldLoad,
+    });
   }
 
   wasBrowserReload(): boolean {
