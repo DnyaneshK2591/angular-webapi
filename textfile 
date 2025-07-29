@@ -1,23 +1,38 @@
-// review-state.guard.ts
-import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
-import { BrowserRefreshHelperService } from './browser-refresh-helper.service';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output
+} from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
-export class ReviewStateGuard implements CanActivate {
-  constructor(private helper: BrowserRefreshHelperService) {}
+@Directive({
+  selector: '[appClickDivOutside]'
+})
+export class ClickDivOutsideDirective {
+  @Input() includeSelector: string[] = [];
+  @Input() excludeSelector: string[] = [];
 
-  canActivate(): boolean {
-    this.helper.logStatus();
+  @Output() includeSelectorCallback = new EventEmitter<void>();
+  @Output() excludeSelectorCallback = new EventEmitter<void>();
+  @Output() clickOutsideEvent = new EventEmitter<void>();
 
-    if (this.helper.wasBrowserReload()) {
-      console.log('✅ Guard: Reload');
-    } else if (this.helper.wasColdLoad()) {
-      console.log('✅ Guard: Cold load');
-    } else if (this.helper.wasRouteNavigation()) {
-      console.log('✅ Guard: Internal navigation');
+  constructor(private el: ElementRef) {}
+
+  @HostListener('document:mousedown', ['$event'])
+  handleDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    const matchesSelector = (selectors: string[]) =>
+      selectors.some(sel => target.closest(sel));
+
+    if (matchesSelector(this.includeSelector)) {
+      this.includeSelectorCallback.emit();
+    } else if (matchesSelector(this.excludeSelector)) {
+      this.excludeSelectorCallback.emit();
+    } else if (!this.el.nativeElement.contains(target)) {
+      this.clickOutsideEvent.emit();
     }
-
-    return true;
   }
 }
