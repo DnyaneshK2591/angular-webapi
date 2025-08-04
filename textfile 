@@ -1,38 +1,25 @@
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  Output
-} from '@angular/core';
-
 @Directive({
-  selector: '[appClickDivOutside]'
+  selector: '[appAutoSave]'
 })
-export class ClickDivOutsideDirective {
-  @Input() includeSelector: string[] = [];
-  @Input() excludeSelector: string[] = [];
+export class AutoSaveDirective implements AfterViewInit, OnDestroy {
+  @Output() autoSave = new EventEmitter<void>();
 
-  @Output() includeSelectorCallback = new EventEmitter<void>();
-  @Output() excludeSelectorCallback = new EventEmitter<void>();
-  @Output() clickOutsideEvent = new EventEmitter<void>();
+  constructor(private elRef: ElementRef) {}
 
-  constructor(private el: ElementRef) {}
-
-  @HostListener('document:mousedown', ['$event'])
-  handleDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-
-    const matchesSelector = (selectors: string[]) =>
-      selectors.some(sel => target.closest(sel));
-
-    if (matchesSelector(this.includeSelector)) {
-      this.includeSelectorCallback.emit();
-    } else if (matchesSelector(this.excludeSelector)) {
-      this.excludeSelectorCallback.emit();
-    } else if (!this.el.nativeElement.contains(target)) {
-      this.clickOutsideEvent.emit();
-    }
+  ngAfterViewInit() {
+    // Listen in capture phase to never miss the click
+    document.addEventListener('click', this.onClick, true);
   }
+
+  ngOnDestroy() {
+    document.removeEventListener('click', this.onClick, true);
+  }
+
+  onClick = (event: MouseEvent) => {
+    const clickedInside = this.elRef.nativeElement.contains(event.target as Node);
+    if (!clickedInside) {
+      // ✅ Emit here — this will ALWAYS work even if Angular misses it
+      this.autoSave.emit();
+    }
+  };
 }
