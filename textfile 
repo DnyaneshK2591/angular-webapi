@@ -1,25 +1,41 @@
+import { Directive, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
+
 @Directive({
-  selector: '[appAutoSave]'
+  selector: '[appDetectChanges]'
 })
-export class AutoSaveDirective implements AfterViewInit, OnDestroy {
-  @Output() autoSave = new EventEmitter<void>();
+export class DetectChangesDirective {
+  @Output() changeDetected = new EventEmitter<void>();
 
-  constructor(private elRef: ElementRef) {}
-
-  ngAfterViewInit() {
-    // Listen in capture phase to never miss the click
-    document.addEventListener('click', this.onClick, true);
+  private emitChange() {
+    this.changeDetected.emit();
   }
 
-  ngOnDestroy() {
-    document.removeEventListener('click', this.onClick, true);
-  }
+  // Detect button and anchor clicks
+  @HostListener('click', ['$event'])
+  handleClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const tagName = target.tagName.toLowerCase();
 
-  onClick = (event: MouseEvent) => {
-    const clickedInside = this.elRef.nativeElement.contains(event.target as Node);
-    if (!clickedInside) {
-      // ✅ Emit here — this will ALWAYS work even if Angular misses it
-      this.autoSave.emit();
+    if (['button', 'a'].includes(tagName)) {
+      this.emitChange();
     }
-  };
+  }
+
+  // Detect input changes (checkbox, radio, text, etc.)
+  @HostListener('input', ['$event'])
+  handleInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (['checkbox', 'radio', 'text', 'number', 'email', 'password'].includes(target.type)) {
+      this.emitChange();
+    }
+  }
+
+  // Detect select (dropdown) changes
+  @HostListener('change', ['$event'])
+  handleChange(event: Event) {
+    const target = event.target as HTMLElement;
+    if (target.tagName.toLowerCase() === 'select') {
+      this.emitChange();
+    }
+  }
 }
