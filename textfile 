@@ -1,41 +1,20 @@
-import { Directive, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
-
-@Directive({
-  selector: '[appDetectChanges]'
-})
-export class DetectChangesDirective {
-  @Output() changeDetected = new EventEmitter<void>();
-
-  private emitChange() {
-    this.changeDetected.emit();
+function deepEqual(a: any, b: any): boolean {
+  if (a === b) return true;
+  if (typeof a !== typeof b) return false;
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false;
+    return a.every((el, i) => deepEqual(el, b[i]));
   }
-
-  // Detect button and anchor clicks
-  @HostListener('click', ['$event'])
-  handleClick(event: Event) {
-    const target = event.target as HTMLElement;
-    const tagName = target.tagName.toLowerCase();
-
-    if (['button', 'a'].includes(tagName)) {
-      this.emitChange();
-    }
+  if (typeof a === 'object' && a !== null && b !== null) {
+    const keysA = Object.keys(a);
+    const keysB = Object.keys(b);
+    if (keysA.length !== keysB.length) return false;
+    return keysA.every(key => deepEqual(a[key], b[key]));
   }
+  return false;
+}
 
-  // Detect input changes (checkbox, radio, text, etc.)
-  @HostListener('input', ['$event'])
-  handleInput(event: Event) {
-    const target = event.target as HTMLInputElement;
-    if (['checkbox', 'radio', 'text', 'number', 'email', 'password'].includes(target.type)) {
-      this.emitChange();
-    }
-  }
-
-  // Detect select (dropdown) changes
-  @HostListener('change', ['$event'])
-  handleChange(event: Event) {
-    const target = event.target as HTMLElement;
-    if (target.tagName.toLowerCase() === 'select') {
-      this.emitChange();
-    }
-  }
+// Usage
+if (!deepEqual(oldArray, newArray)) {
+  console.log('Show unsaved changes popup');
 }
