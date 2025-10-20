@@ -1,25 +1,33 @@
 import _ from "lodash";
 
-function normalize(obj: any): any {
-  // Sort sections, parameters, and data to avoid index-based differences
+normalize(obj: any): any {
+  if (obj === null || obj === undefined) return obj;
+
+  // Handle arrays
   if (Array.isArray(obj)) {
-    return obj.map(normalize).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
-  } else if (_.isObject(obj)) {
+    return obj
+      .filter(o => o !== undefined && o !== null)
+      .map(o => this.normalize(o))
+      .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+  }
+
+  // Handle objects
+  if (_.isPlainObject(obj)) {
     const sortedObj: any = {};
-    Object.keys(obj).sort().forEach(k => {
-      sortedObj[k] = normalize(obj[k]);
-    });
+    Object.keys(obj)
+      .sort()
+      .forEach(key => {
+        sortedObj[key] = this.normalize(obj[key]);
+      });
     return sortedObj;
   }
+
+  // Handle primitive values (string, number, boolean, etc.)
   return obj;
 }
 
-function hasUnsavedChanges(oldData: any, newData: any): boolean {
-  return !_.isEqual(normalize(oldData), normalize(newData));
-}
-
-// ✅ Usage
-const isChanged = hasUnsavedChanges(oldReviewSections, newReviewSections);
-if (isChanged) {
-  console.log("Unsaved changes detected!");
+hasUnsavedChanges(oldData: any, newData: any): boolean {
+  const oldNormalized = this.normalize(oldData);
+  const newNormalized = this.normalize(newData);
+  return !_.isEqual(oldNormalized, newNormalized);
 }
