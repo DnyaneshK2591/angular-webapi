@@ -1,33 +1,48 @@
-import _ from "lodash";
-
-normalize(obj: any): any {
-  if (obj === null || obj === undefined) return obj;
-
-  // Handle arrays
-  if (Array.isArray(obj)) {
-    return obj
-      .filter(o => o !== undefined && o !== null)
-      .map(o => this.normalize(o))
-      .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
-  }
-
-  // Handle objects
-  if (_.isPlainObject(obj)) {
-    const sortedObj: any = {};
-    Object.keys(obj)
-      .sort()
-      .forEach(key => {
-        sortedObj[key] = this.normalize(obj[key]);
-      });
-    return sortedObj;
-  }
-
-  // Handle primitive values (string, number, boolean, etc.)
-  return obj;
-}
-
-hasUnsavedChanges(oldData: any, newData: any): boolean {
-  const oldNormalized = this.normalize(oldData);
-  const newNormalized = this.normalize(newData);
-  return !_.isEqual(oldNormalized, newNormalized);
-}
+1. Why Embedding Microsoft Word Editor Inside Angular Is Not Possible
+Microsoft does not support embedding the Microsoft Word (Office 365 / Word Online) editor inside third-party web applications such as Angular, React, or Vue. This limitation is imposed by Microsoft’s platform architecture and applies to all web frameworks equally.
+The restriction is intentional, documented, and enforced at the platform level and cannot be bypassed through custom development or APIs.
+1.1 Platform-Level Security and Licensing Restrictions
+Microsoft Word Online operates within a Microsoft-controlled security boundary designed to protect:
+User identity and authentication (Azure AD / Microsoft Account)
+Office 365 licensing validation
+Document confidentiality and compliance
+Data loss prevention (DLP) and audit requirements
+To enforce these controls:
+Editing is allowed only within Microsoft-owned and managed environments, such as:
+Word Online (office.com)
+Word Desktop application
+The Word editor cannot be hosted inside external web applications
+As a result:
+Embedding the Word editor inside an iframe or HTML <div> is explicitly blocked
+Cross-origin and sandbox restrictions prevent Word from running in third-party containers
+This ensures Microsoft retains full control over authentication, licensing, and data handling
+These restrictions are by design and are not configurable.
+1.2 Iframe Embedding Is Limited to View-Only
+Microsoft does allow limited iframe embedding, but strictly for viewing purposes only.
+Specifically:
+The Office Online Viewer can be embedded to display documents in read-only mode
+All editing-related features are disabled, including:
+Typing or modifying content
+Saving changes
+Track changes
+Comments and co-authoring
+This limitation exists because:
+Editing requires full Word runtime, licensing validation, and user session management
+These capabilities cannot be safely exposed inside third-party web containers
+Microsoft explicitly differentiates between:
+Viewing → allowed via iframe
+Editing → allowed only in Word Online / Word Desktop
+Any attempt to enable editing within an embedded iframe would violate Microsoft’s supported integration model and is therefore blocked.
+1.3 Framework-Independent Limitation
+It is important to note that this limitation:
+Is not specific to Angular
+Applies equally to React, Vue, plain JavaScript, or any other web framework
+Cannot be resolved by upgrading framework versions or using different libraries
+The constraint is enforced by Microsoft Word itself, not by browser or framework capabilities.
+Summary (Business-Friendly)
+In summary:
+Microsoft Word editing is permitted only within Microsoft-controlled applications
+Embedding the Word editor inside a web application is intentionally restricted
+Iframe embedding supports viewing only, not editing
+These limitations are enforced for security, licensing, and compliance reasons
+Therefore, embedding or enabling live Microsoft Word editing inside an Angular application is not technically feasible or supported.
